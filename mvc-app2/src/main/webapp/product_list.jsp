@@ -1,0 +1,55 @@
+<%@page import="com.nilesh.entity.User"%>
+<%@page import="com.nilesh.entity.Product"%>
+<%@page import="java.util.List"%>
+<%@page import="com.nilesh.service.ProductServiceImpl"%>
+<%@page import="com.nilesh.service.ProductService"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ include file="no-cache-page.jsp" %>
+<%
+	User user =(User)session.getAttribute("user");
+	if(user!=null && user.getUname()!=null){
+		ProductService productService =new  ProductServiceImpl();
+		List<Product> plist= productService.getAll();
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<%@ include file ="menu_admin.jsp" %>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Category</th>
+				<th>Date</th>
+				<th>Delete</th>
+				<th>Update</th>
+				<th>Image</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<%for(Product p:plist){ %>
+				<tr>
+					<td><%= p.getName()%></td>
+					<td><%= p.getPrice()%></td>
+					<td><%= p.getCategory()%></td>
+					<td><%= p.getMdate()%></td>
+					<td><a href="product_delete.jsp?no=<%=p.getNo() %>">delete</a></td>
+					<td><a href="product_update_form.jsp?no=<%=p.getNo() %>">Update</a></td>
+					<td><a href="product_upload_form.jsp?no=<%=p.getNo() %>">Upload</a></td>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+
+</body>
+</html>
+<% }else{
+	response.sendRedirect("login_form.jsp");
+}%>
